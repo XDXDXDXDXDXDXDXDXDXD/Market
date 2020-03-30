@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>登录</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<body>
+
+<div class="layui-bg-gray" style="position: absolute;height: 100%;width: 100%">
+    <div style="display: flex;justify-content: center;margin-top: 15%">
+        <form class="layui-form" style="padding:20px;border: solid #00F7DE 1px;border-radius: 10px;box-shadow: 0 0 10px #294152" th:action="@{/pages/front/login}" method="post">
+            <div class="layui-form-item">
+                <div style="text-align: center">
+                    <p th:text="${errorMsg}" style="color: #eb7350"></p>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="nickName" placeholder="请输入用户名" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                    <input type="password" name="password" placeholder="请输入密码" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div style="text-align: center">
+                    <button type="submit" class="layui-btn layui-btn-normal">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+<script th:src="@{/layui/layui.all.js}"></script>
+
+</body>
+</html>

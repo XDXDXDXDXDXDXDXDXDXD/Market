@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>瀚支商城</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!--引入头部导航栏-->
+    <div th:replace="pages/back/common/bar::top-bar"></div>
+    <!--引入侧边栏-->
+    <div th:replace="pages/back/common/bar::side-bar"></div>
+
+    <!--主体内容-->
+    <div class="layui-body">
+        <div class="layui-card">
+            <form class="layui-form" style="padding: 15px 5px 2px 5px" action="" id="goodsForm">
+                <div class="layui-row">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">一级类型</label>
+                            <div class="layui-input-inline">
+                                <select lay-filter="topType" id="parentType">
+                                    <option th:each="top:${topType}" th:text="${top.getTypeName()}" th:value="${top.getGoodsTypeId()}">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">商品类型</label>
+                            <div class="layui-input-inline">
+                                <select name="goodsTypeId" id="goodsType">
+                                    <!--首次进入时，默认选中一级类型的第一个，以此显示第一个一级类型的所有子类型-->
+                                    <option th:each="t:${topType[0].children}" th:value="${t.getGoodsTypeId()}" th:text="${t.getTypeName()}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">库存</label>
+                            <input class="layui-input-inline layui-input" name="count" placeholder="输入库存" lay-verify="required|number">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">商品原价</label>
+                            <input class="layui-input-inline layui-input" name="oldPrice" placeholder="输入原价" lay-verify="required|number">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">现价</label>
+                            <input class="layui-input-inline layui-input" name="price" placeholder="输入现价" lay-verify="required|number">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">是否在售</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="onSale" value="YES" title="是" checked="">
+                                <input type="radio" name="onSale" value=NO title="否">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标题</label>
+                    <input class="layui-input-inline layui-input" name="title" placeholder="输入标题" lay-verify="required|title">
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-md6">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">上传图片</label>
+                            <div class="layui-input-inline">
+                                <div style="border: dashed darkgrey 1px;width: 110px;height: 120px;position: relative">
+                                    <img src="" alt="在此上传图片" id="previewImg" style="border-radius: 5px;border: solid darkgrey 1px;box-shadow:0 0 10px lightgrey;width: 100%;height: 100%;;
+                                    ;position: absolute;opacity: 0">
+                                </div>
+                                <input type="file" id="pic" name="pic" style="display: none">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">商品详情</label>
+                    <div class="layui-input-block">
+                        <!--引入wangEditor-->
+                        <div id="editor"></div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="text-align: center">
+                    <button type="button" class="layui-btn layui-btn-normal" id="commit" lay-submit lay-filter="goodsform" style="background:#3f71c8;">提交</button>
+                </div>
+                <input type="hidden" name="detail" id="detail"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/layui/layui.all.js"></script>
+<script src="/plugin/wangEditor/release/wangEditor.min.js"></script>
+<script src="/js/myJS.js"></script>
+<script src="/jquery/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+
+    $(function () {
+        //使用layui的form模块
+        layui.use('form',function () {
+
+            var form = layui.form;
+
+            //将previewImg的点击事件与pic的点击事件绑定
+            $("#previewImg").click(function () {
+                $("#pic").click()
+            });
+
+            //上传图片预览
+            $("#pic").change(function () {
+                let file = this.files[0];
+                //调用图片预览函数
+                imgPreview(file,$('#previewImg')[0]);
+                //将img的opacity属性改为1
+                $("#previewImg").css("opacity","1");
+
+            });
+
+            //点击提交时将wangEditor编辑器中的内容赋值给隐藏输入框detail,并清空输入
+            $('#commit').click(function () {
+                let text = editor.txt.html();
+                //赋值
+                $('#detail').val(text);
+                //重置表单内容
+                $("#goodsForm")[0].reset();
+                //清空富文本编辑器中的内容
+                editor.txt.clear();
+                //清空上传文件内容
+                $("#pic").empty();
+                //上传图片透明度重新设为0
+                $("#previewImg").css("opacity","0");
+
+            });
+
+            //监听表单提交事件
+            form.on('submit(goodsform)', function(data){
+
+                console.log(data.elem); //被执行事件的元素DOM对象，一般为button对象
+                console.log(data.form); //被执行提交的form对象，一般在存在form标签时才会返回
+                console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value}
+
+                let formData = new FormData(data.form)
+
+                //ajax请求
+                $.ajax({
+                    url: "/pages/back/goods",
+                    contentType: false,
+                    data:formData,
+                    dataType: 'json',
+                    processData: false,
+                    type: 'post',
+                    success: function (msg) {   //GoodsController传过来的msg用于提示添加是否成功
+                        if(msg.res){
+                            layer.msg(msg.msg);
+                        }
+                    }
+                });
+            });
+
+            //监听select，选择哪个一级类型，查询其子类型进行显示
+            form.on('select(topType)', function(data){
+                //选中一级类型的typeId
+                let pId = data.value;
+                //选中一级类型的子类型存入show中，在下级类型的select框中显示
+                let show;
+                //取到所有一级类型对象topType
+                $("#goodsType").empty();
+                let topTypes = [[${topType}]];
+                for(let i = 0;i<topTypes.length;i++){
+                    let type = topTypes[i];
+                    //如果选中的一级类型和
+                    if(pId == type.goodsTypeId) {
+                        show = type.children;
+                        break;
+                    }
+                }
+                console.log(show);
+                if(show != null){
+                    for (let x = 0;x < show.length;x++){
+                        let type = show[x];
+                        let option = $("<option value=' "+type.goodsTypeId+" '>"+type.typeName+"</option>");
+                        $("#goodsType").append(option);
+                    }
+                }
+                //需要重新渲染才会显示子类型
+                form.render();
+            });
+
+            //自定义的title验证
+            form.verify({
+                title: function(value, item){ //value：表单的值、item：表单的DOM对象
+                    if(/^\d+\d+\d$/.test(value)){
+                        return '标题不能全为数字';
+                    }
+                }
+            });
+        });
+    });
+
+
+</script>
+</body>
+</html>

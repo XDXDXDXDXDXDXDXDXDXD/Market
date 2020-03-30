@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>瀚支商城</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!--引入头部导航栏-->
+    <div th:replace="pages/back/common/bar::top-bar"></div>
+    <!--引入侧边栏-->
+    <div th:replace="pages/back/common/bar::side-bar"></div>
+    <!--主题内容-->
+    <div class="layui-body">
+        <div class="layui-card">
+            <form class="layui-form" style="padding: 15px 5px 2px 5px" action="">
+                <div class="layui-row">
+                    <div class="layui-col-md6">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">父类型</label>
+                            <div class="layui-input-inline">
+                                <select name="parentTypeId">
+                                    <!-- -1表示一级类型 -->
+                                    <option value="-1" selected="">一级类型</option>
+                                    <option th:each="t:${type}" th:value="${t.goodsTypeId}" th:text="${t.typeName}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">类型名称</label>
+                            <input class="layui-input-inline layui-input" name="typeName" placeholder="输入名称" lay-verify="required">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-md6">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">类型序号</label>
+                            <input class="layui-input-inline layui-input" name="sort" placeholder="输入排序序号" lay-verify="required|number">
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">图标样式</label>
+                            <input class="layui-input-inline layui-input" name="iconClass" placeholder="输入图标样式" lay-verify="required">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="text-align: center">
+                    <button type="button" class="layui-btn layui-btn-normal" id="commit" lay-submit lay-filter="goodsTypeform" style="background:#3f71c8;">提交</button>
+                </div>
+            </form>
+    </div>
+</div>
+</div>
+
+<script src="/layui/layui.all.js"></script>
+<script src="/jquery/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+
+    $(function () {
+        //使用layui的form模块
+        layui.use('form',function () {
+
+            var form = layui.form;
+
+
+            //监听表单提交事件
+            form.on('submit(goodsTypeform)', function(data){
+                console.log(data.elem); //被执行事件的元素DOM对象，一般为button对象
+                console.log(data.form); //被执行提交的form对象，一般在存在form标签时才会返回
+                console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value}
+
+                let formData = new FormData(data.form);
+
+                //ajax请求
+                $.ajax({
+                    url: "/pages/back/goodsType",
+                    contentType: false,
+                    data:formData,
+                    dataType: 'json',
+                    processData: false,
+                    type: 'post',
+                    success: function (msg) {   //GoodsController传过来的msg用于提示添加是否成功
+                        if(msg.res){
+                            layer.msg(msg.msg);
+                        }
+
+                    }
+                })
+            });
+        });
+    });
+
+
+</script>
+
+</body>
+</html>

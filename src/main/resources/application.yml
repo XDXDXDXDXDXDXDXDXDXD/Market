@@ -1,0 +1,27 @@
+#\u914D\u7F6E\u6570\u636E\u6E90
+spring:
+  #数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+    url: jdbc:mysql://localhost:3306/market?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT&useSSL=false
+    #使用druid连接池
+    type: com.alibaba.druid.pool.DruidDataSource
+
+  #thymeleaf
+  thymeleaf:
+    cache: false
+  #设置上传文件的最大大小
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+#mybatis配置
+mybatis:
+  configuration:
+    #开启驼峰命名法
+    map-underscore-to-camel-case: true
+    #映射配置文件位置
+  mapper-locations: classpath:mybatis/mapper/**/*.xml
+

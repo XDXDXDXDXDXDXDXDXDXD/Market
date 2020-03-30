@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+</head>
+<body>
+
+<!--头部导航区域-->
+<div class="layui-header" th:fragment="top-bar">
+    <div class="layui-logo" style="background: #122f2f;color: #c0c4cc">
+        <i class="layui-icon layui-icon-home"></i>
+        后台管理
+    </div>
+    <!--导航左侧-->
+    <ul class="layui-nav layui-layout-left">
+        <li class="layui-nav-item"><a href="#">商品信息</a></li>
+        <li class="layui-nav-item"><a href="#">所有订单</a></li>
+        <li class="layui-nav-item"><a href="#">用户管理</a></li>
+        <li class="layui-nav-item">
+            <a href="javascript:">其他系统</a>
+            <dl class="layui-nav-child">
+                <dd><a href="#">邮件管理</a></dd>
+                <dd><a href="#">授权管理</a></dd>
+                <dd><a href="#">员工管理</a></dd>
+                <dd><a href="#">消息管理</a></dd>
+            </dl>
+        </li>
+    </ul>
+    <!--导航右侧-->
+    <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item"></li>
+        <li class="layui-nav-item">
+            <a href="#">
+                <!--图像固定宽度，圆角-->
+                <img src="/images/NeedIt.jpg" alt="" width="20px" style="border-radius: 10px"/>
+                <!--取出用户名-->
+                [[${session.user.getNickName()}]]
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a href="#">基本信息</a></dd>
+                <dd><a href="#">管理员</a></dd>
+                <dd><a href="#">收藏</a></dd>
+                <dd><a href="#"><i class="layui-icon layui-icon-logout"></i>注销</a></dd>
+            </dl>
+        </li>
+    </ul>
+</div>
+
+<!--左侧菜单栏-->
+<div class="layui-side layui-bg-black" th:fragment="side-bar">
+    <div class="layui-side-scroll">
+        <ul class="layui-nav layui-nav-tree" style="">
+            <li class="layui-nav-item">
+                <a href="#">商品信息</a>
+                <dl class="layui-nav-child">
+                    <dd><a th:href="@{/pages/back/goods-add}">商品添加</a></dd>
+                </dl>
+                <dl class="layui-nav-child">
+                    <dd><a th:href="@{/pages/back/goodsType-add}">商品类型添加</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="#">我的图片</a></li>
+            <li class="layui-nav-item"><a href="#">我的历史</a></li>
+            <li class="layui-nav-item">
+                <a href="#">评论</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="#">测试测试</a></dd>
+                    <dd><a href="#">测试测试</a></dd>
+                    <dd><a href="#">测试测试</a></dd>
+                    <dd><a href="#">测试测试</a></dd>
+                    <dd><a href="#">测试测试</a></dd>
+                    <dd><a href="#">测试测试</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+            <li class="layui-nav-item"><a href="#">评论</a></li>
+        </ul>
+    </div>
+</div>
+
+<script src="/layui/layui.all.js"></script>
+</body>
+</html>

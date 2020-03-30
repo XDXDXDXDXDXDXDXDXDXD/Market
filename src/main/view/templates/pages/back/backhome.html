@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>瀚支商城</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <!--引入头部导航栏-->
+    <div th:replace="pages/back/common/bar::top-bar"></div>
+
+    <!--引入左侧菜单栏-->
+    <div th:replace="pages/back/common/bar::side-bar"></div>
+
+    <!--主体内容-->
+    <div class=""></div>
+</div>
+
+
+<script src="/layui/layui.all.js"></script>
+</body>
+</html>
